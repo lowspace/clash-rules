@@ -1,4 +1,6 @@
-# 简介
+# Python 脚本重构 `config.yaml`
+
+## 简介
 
 本项目适用于使用 macOS 的 [**Clash Premium 内核**](https://github.com/Dreamacro/clash/releases/tag/premium) 用户。该脚本允许用户将机场提供的代理节点提取出来放到了由脚本定义的`config.yaml`中。
 
@@ -20,7 +22,7 @@
     '114.114.115.115',
     ```
 
-# 文件介绍
+## 文件介绍
 
 `parser.py`:
 
@@ -47,4 +49,5 @@
   'telegram.org', 
   'whatsapp.com'
   ```
+
 + 输出该 DNS 地址对各个目标节点的测速平均值。

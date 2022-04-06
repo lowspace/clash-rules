@@ -21,7 +21,6 @@ def dns_test(dns: dict):
     # print(dns)
     return
 
-
 # use manger to keep the modified dict values
 manager = multiprocessing.Manager()
 # dns list

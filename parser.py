@@ -4,13 +4,12 @@ import yaml
 import multiprocessing, time
 import subprocess
 
-
 def dns_test(dns: dict):
     """
     run dns test using shell script
     """
     # ref: https://stackoverflow.com/questions/4760215/running-shell-command-and-capturing-the-output
-    dns_sh = os.path.join(os.getcwd(), 'dns_test.sh')
+    dns_sh = os.path.join(os.getcwd(), 'dns_helper.sh')
     result = subprocess.run(dns_sh, stdout=subprocess.PIPE)  # run shell script
     # ref: https://stackoverflow.com/questions/2592764/what-does-a-b-prefix-before-a-python-string-mean
     result = result.stdout.decode(

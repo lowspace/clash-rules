@@ -325,7 +325,7 @@ config['proxy-groups'] = [
     },
 ]
 
-config['rules'] = [
+config['rules'] = [ #https://github.com/Loyalsoldier/clash-rules
     'RULE-SET,applications,DIRECT', 
     'DOMAIN,clash.razord.top,DIRECT',
     'DOMAIN,yacd.haishan.me,DIRECT', 

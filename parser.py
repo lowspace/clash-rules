@@ -4,6 +4,7 @@ import yaml
 import multiprocessing, time
 import subprocess
 
+
 def dns_test(dns: dict):
     """
     run dns test using shell script
@@ -20,6 +21,7 @@ def dns_test(dns: dict):
             dns[result[i]] += float(result[i + 1])
     # print(dns)
     return
+
 
 # use manger to keep the modified dict values
 manager = multiprocessing.Manager()
@@ -57,8 +59,8 @@ name_serve, fallback = dns[:3], dns[3:]
 
 # get the clash config folder location
 user_name = getpass.getuser()
-# clash_path = f'/Users/{user_name}/.config/clash'
-clash_path = '/Users/dnhb/Desktop/03:04:22 ClashX Parser'
+clash_path = f'/Users/{user_name}/.config/clash'
+# clash_path = '/Users/dnhb/Desktop/03:04:22 ClashX Parser'
 
 # get the path of config and provider
 for i in os.listdir(clash_path):
@@ -301,7 +303,7 @@ config['proxy-groups'] = [
         'type': 'select'
     },
     {
-        'name': 'WhiteList', # run proxy on rules and unknown situations
+        'name': 'WhiteList',  # run proxy on rules and unknown situations
         'type': 'url-test',
         'url': 'http://www.google.com.hk/',
         'interval': 3600,  #s
@@ -309,7 +311,7 @@ config['proxy-groups'] = [
         'proxies': ['Proxy'],
     },
     {
-        'name': 'BlackList', # run proxy only on rules
+        'name': 'BlackList',  # run proxy only on rules
         'type': 'url-test',
         'url': 'http://www.google.com.hk/',
         'interval': 3600,  #s
@@ -324,12 +326,24 @@ config['proxy-groups'] = [
 ]
 
 config['rules'] = [
-    'RULE-SET,applications,DIRECT', 'DOMAIN,clash.razord.top,DIRECT',
-    'DOMAIN,yacd.haishan.me,DIRECT', 'RULE-SET,private,DIRECT',
-    'RULE-SET,reject,REJECT', 'RULE-SET,icloud,Proxy', 'RULE-SET,apple,Proxy',
-    'RULE-SET,google,Proxy', 'RULE-SET,proxy,Proxy', 'RULE-SET,direct,DIRECT',
-    'RULE-SET,lancidr,DIRECT', 'RULE-SET,cncidr,DIRECT',
-    'RULE-SET,telegramcidr,Proxy', 'GEOIP,LAN,DIRECT', 'GEOIP,CN,DIRECT',
+    'RULE-SET,applications,DIRECT', 
+    'DOMAIN,clash.razord.top,DIRECT',
+    'DOMAIN,yacd.haishan.me,DIRECT', 
+    'RULE-SET,private,DIRECT',
+    'RULE-SET,reject,REJECT', 
+    'RULE-SET,icloud,Proxy', 
+    'RULE-SET,apple,Proxy',
+    'RULE-SET,google,Proxy', 
+    'RULE-SET,proxy,Proxy', 
+    'RULE-SET,direct,DIRECT',
+    'RULE-SET,lancidr,DIRECT', 
+    'RULE-SET,cncidr,DIRECT',
+    'RULE-SET,tld-not-cn,Proxy',
+    'RULE-SET,gfw,Proxy',
+    'RULE-SET,greatfire,Proxy',
+    'RULE-SET,telegramcidr,Proxy', 
+    'GEOIP,LAN,DIRECT', 
+    'GEOIP,CN,DIRECT',
     'MATCH,Mode'
 ]
 

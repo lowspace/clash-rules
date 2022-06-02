@@ -68,7 +68,7 @@ for i in os.listdir(clash_path):
     if i.endswith('.yaml'):
         provider_path = os.path.join(clash_path, i)
 
-config_path, provider_path
+print(f'config yaml path is {config_path}; proxy provider yaml path is {provider_path}.')
 
 # load the provider file
 with open(provider_path, "r") as stream:

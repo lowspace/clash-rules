@@ -3,6 +3,8 @@ import getpass  # obtain the user name
 import yaml
 import multiprocessing, time
 import subprocess
+import platform
+
 
 def dns_test(dns: dict):
     """
@@ -20,6 +22,9 @@ def dns_test(dns: dict):
             dns[result[i]] += float(result[i + 1])
     # print(dns)
     return
+
+
+provider_url = input('plz paste ur proxy provider url.')
 
 # use manger to keep the modified dict values
 manager = multiprocessing.Manager()
@@ -64,18 +69,29 @@ clash_path = f'/Users/{user_name}/.config/clash'
 for i in os.listdir(clash_path):
     if i == 'config.yaml':
         config_path = os.path.join(clash_path, i)
-        continue
-    if i.endswith('.yaml'):
+    elif i.endswith('.yaml'):
+        provider = i.split('.yaml')[0]
         provider_path = os.path.join(clash_path, i)
 
-print(f'config yaml path is {config_path}; proxy provider yaml path is {provider_path}.')
+print(
+    f'config yaml path is {config_path}; proxy provider yaml path is {provider_path}.'
+)
+
+# config_path = os.path.join(clash_path, 'config.yaml')
+# if os.path.exists(config_path):
+#     os.remove(config_path)
+#     print('config.yaml has been removed.')
+# else:
+#     with open('config.yaml', 'w') as f:
+#         pass
+#     print('config.yaml has been created')
 
 # load the provider file
-with open(provider_path, "r") as stream:
-    try:
-        provider = yaml.safe_load(stream)
-    except yaml.YAMLError as exc:
-        print(exc)
+# with open(provider_path, "r") as stream:
+#     try:
+#         provider = yaml.safe_load(stream)
+#     except yaml.YAMLError as exc:
+#         print(exc)
 
 config = dict()
 
@@ -83,9 +99,14 @@ config['port'] = 7890  # HTTP Proxy Port
 
 config['socks-port'] = 7891  # socks5 port
 
-config['redir-port'] = 7892  # redir proxy port for Linux and macOS
+# REF: https://stackoverflow.com/questions/1854/python-what-os-am-i-running-on
+if platform.system() == 'Darwin':
+    config['redir-port'] = 7892  # redir proxy port for Linux and macOS
+else:
+    pass
 
-config['allow-lan'] = True  # allow local area internet
+config[
+    'allow-lan'] = False  # fobidden local area internet to elude the ssh connection error
 
 config['mode'] = 'Rule'  # Rule/Global/Direct
 
@@ -291,8 +312,8 @@ config['rule-providers'] = {  # https://github.com/Loyalsoldier/clash-rules
     }
 }
 
-proxy_list = provider['proxy-groups'][0]['proxies']
-config['proxies'] = provider['proxies']
+# proxy_list = provider['proxy-groups'][0]['proxies']
+# config['proxies'] = provider['proxies']
 
 config['proxy-groups'] = [
     {
@@ -302,7 +323,8 @@ config['proxy-groups'] = [
     },
     {
         'name': 'WhiteList',  # run proxy on rules and unknown situations
-        'type': 'url-test',
+        'type':
+        'fallback',  # REF: https://github.com/Dreamacro/clash/wiki/configuration#proxy-groups
         'url': 'http://www.google.com.hk/',
         'interval': 3600,  #s
         'tolerance': 50,  # ms
@@ -310,7 +332,7 @@ config['proxy-groups'] = [
     },
     {
         'name': 'BlackList',  # run proxy only on rules
-        'type': 'url-test',
+        'type': 'fallback',
         'url': 'http://www.google.com.hk/',
         'interval': 3600,  #s
         'tolerance': 50,  # ms
@@ -319,30 +341,36 @@ config['proxy-groups'] = [
     {
         'name': 'Proxy',
         'type': 'select',
-        'proxies': proxy_list
+        # 'proxies': proxy_list
+        'use': [
+            provider,
+        ]
     },
 ]
 
-config['rules'] = [ #https://github.com/Loyalsoldier/clash-rules
-    'RULE-SET,applications,DIRECT', 
-    'DOMAIN,clash.razord.top,DIRECT',
-    'DOMAIN,yacd.haishan.me,DIRECT', 
-    'RULE-SET,private,DIRECT',
-    'RULE-SET,reject,REJECT', 
-    'RULE-SET,icloud,Proxy', 
-    'RULE-SET,apple,Proxy',
-    'RULE-SET,google,Proxy', 
-    'RULE-SET,proxy,Proxy', 
-    'RULE-SET,direct,DIRECT',
-    'RULE-SET,lancidr,DIRECT', 
-    'RULE-SET,cncidr,DIRECT',
-    'RULE-SET,tld-not-cn,Proxy',
-    'RULE-SET,gfw,Proxy',
-    'RULE-SET,greatfire,Proxy',
-    'RULE-SET,telegramcidr,Proxy', 
-    'GEOIP,LAN,DIRECT', 
-    'GEOIP,CN,DIRECT',
-    'MATCH,Mode'
+config['proxy-providers'] = {
+    provider: {
+        'type': 'http',
+        'path': provider_path,
+        'url': provider_url,
+        'interval': 3600,
+        'health-check': {
+            'enable': True,
+            'url': 'http://www.google.com.hk/',
+            'interval': 300
+        }
+    }
+}
+
+config['rules'] = [  #https://github.com/Loyalsoldier/clash-rules
+    'RULE-SET,applications,DIRECT', 'DOMAIN,clash.razord.top,DIRECT',
+    'DOMAIN,yacd.haishan.me,DIRECT', 'RULE-SET,private,DIRECT',
+    'RULE-SET,reject,REJECT', 'RULE-SET,icloud,Proxy', 'RULE-SET,apple,Proxy',
+    'RULE-SET,google,Proxy', 'RULE-SET,proxy,Proxy', 'RULE-SET,direct,DIRECT',
+    'RULE-SET,lancidr,DIRECT', 'RULE-SET,cncidr,DIRECT',
+    'RULE-SET,tld-not-cn,Proxy', 'RULE-SET,gfw,Proxy',
+    'RULE-SET,greatfire,Proxy', 'RULE-SET,telegramcidr,Proxy',
+    'GEOIP,LAN,DIRECT', 'GEOIP,CN,DIRECT', 'MATCH,Mode'
 ]
 
 with open(config_path, "w", encoding='utf-8') as stream:
@@ -350,4 +378,4 @@ with open(config_path, "w", encoding='utf-8') as stream:
               stream,
               default_flow_style=False,
               allow_unicode=True,
-              line_break='\n')
+              line_break='\n\n')

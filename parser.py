@@ -77,22 +77,6 @@ print(
     f'config yaml path is {config_path}; proxy provider yaml path is {provider_path}.'
 )
 
-# config_path = os.path.join(clash_path, 'config.yaml')
-# if os.path.exists(config_path):
-#     os.remove(config_path)
-#     print('config.yaml has been removed.')
-# else:
-#     with open('config.yaml', 'w') as f:
-#         pass
-#     print('config.yaml has been created')
-
-# load the provider file
-# with open(provider_path, "r") as stream:
-#     try:
-#         provider = yaml.safe_load(stream)
-#     except yaml.YAMLError as exc:
-#         print(exc)
-
 config = dict()
 
 config['port'] = 7890  # HTTP Proxy Port
@@ -311,9 +295,6 @@ config['rule-providers'] = {  # https://github.com/Loyalsoldier/clash-rules
         'https://cdn.jsdelivr.net/gh/Loyalsoldier/clash-rules@release/tld-not-cn.txt'
     }
 }
-
-# proxy_list = provider['proxy-groups'][0]['proxies']
-# config['proxies'] = provider['proxies']
 
 config['proxy-groups'] = [
     {

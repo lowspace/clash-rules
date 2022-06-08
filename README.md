@@ -26,8 +26,9 @@
 
 `parser.py`:
 
++ 输入自己的机场订阅链接，使用 proxy-provider 功能，一次输入，终生受益；
 + 调用 `dns_helper.sh` 进行 DNS 五次并行测速并提取结果；
-+ 读取用户名，找到 clash 的设置文件夹位置并读取机场所提供的`jichang.yaml` 文件；
++ ~~读取用户名，找到 clash 的设置文件夹位置并读取机场所提供的`proxy_provider.yaml` 文件；~~
 + 设置 `config.yaml`:
   + 配置 DNS 相关参数；
   + 设置规则集；

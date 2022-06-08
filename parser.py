@@ -24,7 +24,7 @@ def dns_test(dns: dict):
     return
 
 
-provider_url = input('plz paste ur proxy provider url.')
+provider_url = input('plz paste ur proxy provider url.\n')
 
 # use manger to keep the modified dict values
 manager = multiprocessing.Manager()

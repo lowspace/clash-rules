@@ -24,7 +24,8 @@ def dns_test(dns: dict):
     return
 
 if __name__ == "__main__":
-    provider_url = input('plz paste ur proxy provider url.\n')
+    # provider_url = input('plz paste ur proxy provider url.\n')
+    provider_url = 'https://airtcplink.top/link/wUPE4AK4xzjuFkzT?clash=1'
 
     # use manger to keep the modified dict values
     manager = multiprocessing.Manager()
@@ -86,15 +87,15 @@ if __name__ == "__main__":
 
     config = dict()
 
-    config['port'] = 7890  # HTTP Proxy Port
+    # config['port'] = 7890  # HTTP Proxy Port
 
-    config['socks-port'] = 7891  # socks5 port
+    # config['socks-port'] = 7891  # socks5 port
 
-    # REF: https://stackoverflow.com/questions/1854/python-what-os-am-i-running-on
-    if platform.system() == 'Darwin':
-        config['redir-port'] = 7892  # redir proxy port for Linux and macOS
-    else:
-        pass
+    # # REF: https://stackoverflow.com/questions/1854/python-what-os-am-i-running-on
+    # if platform.system() == 'Darwin':
+    #     config['redir-port'] = 7892  # redir proxy port for Linux and macOS
+    # else:
+    #     pass
 
     config[
         'allow-lan'] = False  # fobidden local area internet to elude the ssh connection error
@@ -124,11 +125,9 @@ if __name__ == "__main__":
         'macOS-auto-detect-interface': True,
         'macOS-auto-route': True,
         'stack': 'system'
+        'dns-hijack': ['tcp://8.8.8.8:53', '8.8.8.8:1053'] # fake-ip setting
     }
 
-    config['dns-hijack'] = [  # fake-ip setting
-        'tcp://8.8.8.8:53', '8.8.8.8:1053'
-    ]
 
     config['experimental'] = {'interface-name': 'en0'}
 
